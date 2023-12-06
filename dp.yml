@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins1
+    #  namespace: jenkins-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins1
+  template:
+    metadata:
+      labels:
+        app: jenkins1
+    spec:
+      containers:
+      - name: jenkins1
+        image: jenkins/jenkins:lts
+        ports:
+        - containerPort: 8080
+          name: http-port
+        - containerPort: 50000
+          name: jnlp-port
+        volumeMounts:
+        - name: jenkins-vol1
+          mountPath: /var/jenkins_home/workspace
+      volumes:
+      - name: jenkins-vol1
+        persistentVolumeClaim:
+          claimName: jenkins-pvc1
+
